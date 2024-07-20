@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "turbo_library"
+version = "0.0.1"
+authors = [
+    {name = "mign0n", email = "mign0n.git@gmail.com"},
+]
+description = "Консольное приложение для управления библиотекой книг."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.12, <3.13"
+
+[project.scripts]
+library = "library.__main__:main"
