@@ -37,18 +37,28 @@ def configure_argument_parser() -> argparse.ArgumentParser:
     add_parser.add_argument('year', help='Год издания книги')
     add_parser.set_defaults(func=services.add)
 
-    list_parser = subparsers.add_parser(
-        'list',
-        help='Выводит список книг в библиотеке',
-    )
-    list_parser.set_defaults(func=services.show_all)
-
     delete_parser = subparsers.add_parser(
         'delete',
         help='Удаляет книгу из библиотеки',
     )
     delete_parser.add_argument('id', help='Идентификатор книги')
     delete_parser.set_defaults(func=services.delete)
+
+    search_parser = subparsers.add_parser(
+        'search',
+        help='Осуществляет поиск книг в библиотеке',
+    )
+    search_parser.add_argument('-t', '--title', help='Поиск по названию')
+    search_parser.add_argument('-a', '--author', help='Поиск по автору')
+    search_parser.add_argument('-y', '--year', help='Поиск по году издания')
+    search_parser.set_defaults(func=services.search)
+
+    list_parser = subparsers.add_parser(
+        'list',
+        help='Выводит список книг в библиотеке',
+    )
+    list_parser.set_defaults(func=services.show_all)
+
     return parser
 
 

@@ -79,6 +79,11 @@ class Library:
                 books.append(Book(**attrs))
             return books
 
+    @property
+    def books(self) -> list[Book]:
+        """Возвращает список книг библиотеки."""
+        return self._books
+
     def add(self, title: str, author: str, year: str) -> Book:
         """Добавляет книгу в библиотеку."""
         book_id = self._next_id
@@ -100,7 +105,22 @@ class Library:
                 self._write()
                 return deleted_book
 
-    @property
-    def books(self) -> list[Book]:
-        """Возвращает список книг библиотеки."""
-        return self._books
+    def _search_by_field(self, subj: str | int, field: str) -> list[Book]:
+        """Фильтрует книги по значению 'subj' поля 'field'."""
+        return [book for book in self._books if getattr(book, field) == subj]
+
+    def search(
+        self,
+        title: str | None = None,
+        author: str | None = None,
+        year: int | None = None,
+    ) -> list[Book]:
+        """Осуществляет поиск книг по названию, автору или году издания."""
+        if title is not None:
+            return self._search_by_field(title, 'title')
+        if author is not None:
+            return self._search_by_field(author, 'author')
+        if year is not None:
+            return self._search_by_field(year, 'year')
+        logging.info('Ничего не найдено.')
+        return []

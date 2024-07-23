@@ -92,7 +92,39 @@ class LibraryTestCase(unittest.TestCase):
                 json.load(file),
             )
 
-    def test_05_delete_book(self) -> None:
+    def test_05_search_book_by_title(self) -> None:
+        """Тест поиска книги по названию."""
+        self.assertEqual(
+            self.library.search(title='test title'),
+            [Book(1, 'test title', 'test author', 1970, Status.AVAILABLE)],
+        )
+        self.assertEqual(self.library.search(title='not-exists'), [])
+
+    def test_05_search_book_by_author(self) -> None:
+        """Тест поиска книги по автору."""
+        self.assertEqual(
+            self.library.search(author='test author'),
+            [Book(1, 'test title', 'test author', 1970, Status.AVAILABLE)],
+        )
+        self.assertEqual(self.library.search(author='not-exists'), [])
+
+    def test_05_search_book_by_year(self) -> None:
+        """Тест поиска книги по году издания."""
+        self.assertEqual(
+            self.library.search(year=1980),
+            [
+                Book(
+                    2,
+                    'test title 2',
+                    'test author 2',
+                    1980,
+                    Status.AVAILABLE,
+                ),
+            ],
+        )
+        self.assertEqual(self.library.search(year=3000), [])
+
+    def test_10_delete_book(self) -> None:
         """Тест удаления книги."""
         self.library.delete(1)
         self.assertEqual(

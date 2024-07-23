@@ -18,16 +18,22 @@ def delete(library: Library, args) -> None:
         logging.info('Значение id должно являться целым числом.')
 
 
-def search(library: Library) -> None:
+def search(library: Library, args) -> None:
     """Ищет книгу по заданному аргументу."""
-    logging.info('Finded')
+    year = None
+    if args.year:
+        try:
+            year = int(args.year)
+        except ValueError:
+            logging.info('Значение year должно являться целым числом.')
+    for book in library.search(args.title, args.author, year):
+        print(book.as_dict)
 
 
 def show_all(library: Library, *args, **kwargs) -> None:
     """Выводит все книги."""
     for book in library.books:
         print(book.as_dict)
-    logging.info('Listed')
 
 
 def set_status(library: Library) -> None:
