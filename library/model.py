@@ -10,6 +10,8 @@ FILE_PATH = Path('library.json')
 
 
 class Status(Enum):
+    """Объект статуса книги."""
+
     AVAILABLE = 'в наличии'
     ISSUED = 'выдана'
 
@@ -26,6 +28,7 @@ class Book:
 
     @property
     def as_dict(self) -> dict[str, int | str]:
+        """Возвращает свойства книги в виде словаря."""
         return {
             'id': self.id,
             'title': self.title,
@@ -50,6 +53,7 @@ class Library:
 
     @property
     def _next_id(self) -> int:
+        """Вычисляет идентификатор следующей книги."""
         if not self._books_ids:
             next_id = 1
         else:
@@ -57,12 +61,14 @@ class Library:
         return next_id
 
     def _write(self) -> None:
+        """Сохраняет книги в файл."""
         self.file_path.write_text(
             json.dumps([book.as_dict for book in self._books]),
             encoding=self.encoding,
         )
 
     def _read(self) -> list[Book]:
+        """Загружает книги из файла."""
         if not self.file_path.exists():
             logging.info('Библиотека пуста.')
             return []
@@ -74,6 +80,7 @@ class Library:
             return books
 
     def add(self, title: str, author: str, year: str) -> Book:
+        """Добавляет книгу в библиотеку."""
         book_id = self._next_id
         book = Book(book_id, title, author, int(year))
         self._books.append(book)
@@ -83,4 +90,5 @@ class Library:
 
     @property
     def books(self) -> list[Book]:
+        """Возвращает список книг библиотеки."""
         return self._books

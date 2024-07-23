@@ -47,6 +47,7 @@ def configure_argument_parser() -> argparse.ArgumentParser:
 
 
 def configure_logging():
+    """Конфигурирует логгер."""
     logging.basicConfig(
         datefmt=DATETIME_FORMAT,
         format=LOG_FORMAT,
