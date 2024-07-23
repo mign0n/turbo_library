@@ -9,9 +9,13 @@ def add(library: Library, args) -> None:
     logging.info(f'Added {book}')
 
 
-def delete(library: Library) -> None:
+def delete(library: Library, args) -> None:
     """Удаляет книгу из библиотеки."""
-    logging.info('Deleted')
+    try:
+        book = library.delete(int(args.id))
+        logging.info(f'Deleted {book}')
+    except ValueError:
+        logging.info('Значение id должно являться целым числом.')
 
 
 def search(library: Library) -> None:
@@ -22,7 +26,7 @@ def search(library: Library) -> None:
 def show_all(library: Library, *args, **kwargs) -> None:
     """Выводит все книги."""
     for book in library.books:
-        print(book)
+        print(book.as_dict)
     logging.info('Listed')
 
 

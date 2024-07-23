@@ -88,6 +88,18 @@ class Library:
         self._write()
         return book
 
+    def delete(self, id: int) -> Book | None:
+        """Удаляет книгу из библиотеки по id."""
+        if id not in self._books_ids:
+            logging.info(f'Книги с id = {id} не существует.')
+            return None
+        for idx in range(len(self._books)):
+            if self._books[idx].id == id:
+                deleted_book = self._books.pop(idx)
+                self._books_ids.remove(id)
+                self._write()
+                return deleted_book
+
     @property
     def books(self) -> list[Book]:
         """Возвращает список книг библиотеки."""

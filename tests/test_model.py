@@ -1,9 +1,12 @@
 import json
 import os
+from pathlib import Path
 import unittest
 
 
-from library.model import FILE_PATH, Book, Library, Status
+from library.model import Book, Library, Status
+
+TEST_FILE_PATH = Path('test_library.json')
 
 
 class LibraryTestCase(unittest.TestCase):
@@ -12,12 +15,12 @@ class LibraryTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Создает тестовый объект библиотеки."""
-        cls.library = Library(FILE_PATH)
+        cls.library = Library(TEST_FILE_PATH)
 
     @classmethod
     def tearDownClass(cls):
         """Удаляет тестовый файл с данными библиотеки."""
-        os.remove(FILE_PATH)
+        os.remove(TEST_FILE_PATH)
 
     def test_01_create_new_book(self) -> None:
         """Тест добавления книги в библиотеку."""
@@ -78,6 +81,30 @@ class LibraryTestCase(unittest.TestCase):
                         'year': 1970,
                         'status': Status.AVAILABLE.value,
                     },
+                    {
+                        'id': 2,
+                        'title': 'test title 2',
+                        'author': 'test author 2',
+                        'year': 1980,
+                        'status': Status.AVAILABLE.value,
+                    },
+                ],
+                json.load(file),
+            )
+
+    def test_05_delete_book(self) -> None:
+        """Тест удаления книги."""
+        self.library.delete(1)
+        self.assertEqual(
+            self.library.books,
+            [Book(2, 'test title 2', 'test author 2', 1980, Status.AVAILABLE)],
+        )
+        self.assertNotIn(1, self.library._books_ids)
+        with self.library.file_path.open(
+            encoding=self.library.encoding
+        ) as file:
+            self.assertEqual(
+                [
                     {
                         'id': 2,
                         'title': 'test title 2',
