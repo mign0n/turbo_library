@@ -1,15 +1,16 @@
+import argparse
 import logging
 
 from model import Library
 
 
-def add(library: Library, args) -> None:
+def add(library: Library, args: argparse.Namespace) -> None:
     """Добавляет книгу в библиотеку."""
     book = library.add(args.title, args.author, args.year)
     logging.info(f'Added {book}')
 
 
-def delete(library: Library, args) -> None:
+def delete(library: Library, args: argparse.Namespace) -> None:
     """Удаляет книгу из библиотеки."""
     try:
         book = library.delete(int(args.id))
@@ -18,7 +19,7 @@ def delete(library: Library, args) -> None:
         logging.info('Значение id должно являться целым числом.')
 
 
-def search(library: Library, args) -> None:
+def search(library: Library, args: argparse.Namespace) -> None:
     """Ищет книгу по заданному аргументу."""
     year = None
     if args.year:
@@ -30,7 +31,7 @@ def search(library: Library, args) -> None:
         print(book.as_dict)
 
 
-def show_all(library: Library, *args) -> None:
+def show_all(library: Library, *args: argparse.Namespace) -> None:
     """Выводит все книги."""
     for book in library.books:
         print(book.as_dict)
