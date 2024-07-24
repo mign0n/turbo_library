@@ -15,6 +15,10 @@ class Status(Enum):
     AVAILABLE = 'в наличии'
     ISSUED = 'выдана'
 
+    @classmethod
+    def values(cls):
+        return cls._value2member_map_
+
 
 @dataclass
 class Book:
