@@ -30,12 +30,13 @@ def search(library: Library, args) -> None:
         print(book.as_dict)
 
 
-def show_all(library: Library, *args, **kwargs) -> None:
+def show_all(library: Library, *args) -> None:
     """Выводит все книги."""
     for book in library.books:
         print(book.as_dict)
 
 
-def set_status(library: Library) -> None:
+def set_status(library: Library, args) -> None:
     """Устанавливает статус книги."""
-    logging.info('Status is set')
+    book = library.set_status(int(args.id), args.status)
+    logging.info(f'Status {args.status} for book {book} is set')

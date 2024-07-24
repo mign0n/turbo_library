@@ -1,6 +1,7 @@
 import argparse
 import logging
 
+from model import Status
 import services
 
 PARSER_DESCRIPTION = (
@@ -58,6 +59,18 @@ def configure_argument_parser() -> argparse.ArgumentParser:
         help='Выводит список книг в библиотеке',
     )
     list_parser.set_defaults(func=services.show_all)
+
+    set_status_parser = subparsers.add_parser(
+        'set-status',
+        help='Устанавливает новый статус книги.',
+    )
+    set_status_parser.add_argument('id', help='Идентификатор книги')
+    set_status_parser.add_argument(
+        'status',
+        choices=Status._value2member_map_,
+        help='Желаемый статус книги',
+    )
+    set_status_parser.set_defaults(func=services.set_status)
 
     return parser
 

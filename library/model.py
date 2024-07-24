@@ -16,7 +16,7 @@ class Status(Enum):
     ISSUED = 'выдана'
 
 
-@dataclass(frozen=True)
+@dataclass
 class Book:
     """Объект книги."""
 
@@ -84,7 +84,12 @@ class Library:
         """Возвращает список книг библиотеки."""
         return self._books
 
-    def add(self, title: str, author: str, year: str) -> Book:
+    def add(
+        self,
+        title: str,
+        author: str,
+        year: str,
+    ) -> Book:
         """Добавляет книгу в библиотеку."""
         book_id = self._next_id
         book = Book(book_id, title, author, int(year))
@@ -93,7 +98,7 @@ class Library:
         self._write()
         return book
 
-    def delete(self, id: int) -> Book | None:
+    def delete(self, id: int, commit: bool = True) -> Book | None:
         """Удаляет книгу из библиотеки по id."""
         if id not in self._books_ids:
             logging.info(f'Книги с id = {id} не существует.')
@@ -102,7 +107,8 @@ class Library:
             if self._books[idx].id == id:
                 deleted_book = self._books.pop(idx)
                 self._books_ids.remove(id)
-                self._write()
+                if commit:
+                    self._write()
                 return deleted_book
 
     def _search_by_field(self, subj: str | int, field: str) -> list[Book]:
@@ -124,3 +130,18 @@ class Library:
             return self._search_by_field(year, 'year')
         logging.info('Ничего не найдено.')
         return []
+
+    def set_status(
+        self,
+        id: int,
+        status: str,
+    ) -> Book | None:
+        """Устанавливает новый статус книги."""
+        book = self.delete(id, commit=False)
+        if not book:
+            return None
+        book.status = Status(status)
+        self._books.append(book)
+        self._books_ids.add(book.id)
+        self._write()
+        return book
